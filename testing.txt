@@ -1,0 +1,175 @@
+Script started on Tue 07 Nov 2017 08:41:53 AM PST
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat warehouse.cpp
+#include <iomanip>
+#include "warehouse.h"
+#include <iostream>
+#include <cstring>
+#include <fstream>
+using namespace std;
+//Book books_[Warehouse::MAX_BOOKS];
+//long bookCount_;
+Warehouse::Warehouse()
+{
+	bookCount_ = 0;	
+}
+Warehouse::~Warehouse()
+{
+	//Deconstructor
+	//delete[]books_;
+}
+
+//glorified constructor
+istream& operator >> (istream& input, Warehouse& warehouse)
+{
+
+	for ( int i = 0; i < 4; i++)
+	{
+		input >> warehouse.books_[warehouse.bookCount_];
+		warehouse.bookCount_++;
+	}
+
+}
+
+ostream& operator << (ostream& output, const Warehouse& warehouse)
+{
+
+	for(int i = 0; i<warehouse.getBookCount(); i++)
+		output <<  warehouse.getBooks(i)<<endl << endl;		
+	
+}
+
+bool Warehouse::find(string isbn, Book& book) const
+{
+	for (int i = 0; i < bookCount_ -1; i++)
+	{	
+		
+	
+		if (isbn.compare(books_[i].getISBN())==0)
+		{
+			book = books_[i];
+			return true;
+		}	
+		else
+			return false;
+	}	
+
+}
+
+int Warehouse::find(short year, Book books[]) const
+{
+	int count;
+	for (int i = 0; i < bookCount_; i++)
+	{
+		if (books_[i].getYear() == year)
+			count++;
+	}
+	return count;	
+}
+void Warehouse::sort_()
+{
+	Book temp;
+	int j;
+	for (int i = 0; i < bookCount_; i++){
+		j = i;
+
+		while (j > 0 && books_[j] < books_[j-1]){
+			  temp = books_[j];
+			  books_[j] = books_[j-1];
+			  books_[j-1] = temp;
+			  j--;
+			  }
+		}
+	
+	
+	
+	/*Book temp;
+	for (int i = 0; i <bookCount_ ; i++)
+	{
+		for(int j =1; j< bookCount_ -1; j++)
+		{
+			if (books_[j] < books_[i])
+			{
+				temp = books_[i];
+				books_[i] = books_[j];
+				books_[j] = temp;
+			}
+		}
+	}
+	*/
+}
+void Warehouse::sortBooks() 
+{
+	sort_();
+}
+int Warehouse::getBookCount() const
+	{return bookCount_;}
+Book Warehouse::getBooks(int index) const
+	{return books_[index];}
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m ./proj01
+---------------------- Sorted Inventory List by ISBN ---------------------
+Title: C++ Network Programming - Volume 1
+Author: 
+	Douglas C. Schmidt
+	Stephen D. Huston
+Publisher: Addison-Wesley
+Year: 2002
+Cover: Hardcover 
+Price: 35.9
+ISBN: 0-201-60464-7
+Copies: 236
+
+
+Title: Problem Solving C++ - The Object of Programming
+Author: 
+	Walter Savitch
+	Andrew Hunt
+Publisher: Addison Wesley Longman, Inc.
+Year: 2001
+Cover: Hardcover 
+Price: 74
+ISBN: 0-201-70390-4
+Copies: 325
+
+
+Title: Programming Ruby
+Author: 
+	David Thomas
+	Andrew Hunt
+Publisher: Addison-Wesley
+Year: 2001
+Cover: Paperback
+Price: 42.95
+ISBN: 0-201-71089-7
+Copies: 123
+
+
+Title: Peopleware - Productive Projects and Teams
+Author: 
+	Tom DeMarco
+	Timothy Lister
+Publisher: Dorset House Publishing Co.
+Year: 1999
+Cover: Paperback
+Price: 33.95
+ISBN: 0-932-63343-9
+Copies: 38
+
+
+----------------- Inventory Search ----------------
+ISBN: 0-932-63343-7 --NOT FOUND
+ISBN: 1-234-56789-0 --NOT FOUND
+ISBN: 0-201-60464-7-- FOUND:
+Title: C++ Network Programming - Volume 1
+Author: 
+	Douglas C. Schmidt
+	Stephen D. Huston
+Publisher: Addison-Wesley
+Year: 2002
+Cover: Hardcover 
+Price: 35.9
+ISBN: 0-201-60464-7
+Copies: 236
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m exit
+exit
+
+Script done on Tue 07 Nov 2017 08:42:09 AM PST

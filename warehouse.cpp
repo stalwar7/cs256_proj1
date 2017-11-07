@@ -66,6 +66,21 @@ int Warehouse::find(short year, Book books[]) const
 void Warehouse::sort_()
 {
 	Book temp;
+	int j;
+	for (int i = 0; i < bookCount_; i++){
+		j = i;
+
+		while (j > 0 && books_[j] < books_[j-1]){
+			  temp = books_[j];
+			  books_[j] = books_[j-1];
+			  books_[j-1] = temp;
+			  j--;
+			  }
+		}
+	
+	
+	
+	/*Book temp;
 	for (int i = 0; i <bookCount_ ; i++)
 	{
 		for(int j =1; j< bookCount_ -1; j++)
@@ -78,6 +93,7 @@ void Warehouse::sort_()
 			}
 		}
 	}
+	*/
 }
 void Warehouse::sortBooks() 
 {

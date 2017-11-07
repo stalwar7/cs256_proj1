@@ -66,17 +66,17 @@ bool operator> ( Book& book, Book& book2)
 		(book2.getPrice() == book.getPrice()) &&
 		(book2.getISBN() == book.getISBN());
 }
-/*Book Book::operator= ( Book& book, Book& book2)
+Book Book::operator= (const Book& book) 
 {
-		title_ = book.getTitle();
-		authors_[MAX_AUTHORS]= book.authors_[MAX_AUTHORS];
-		publisher_ = book.publisher_;
+		title_ = book.title_;
+		authors_[Book::MAX_AUTHORS] = book.authors_[Book::MAX_AUTHORS]; 
+		publisher_  = book.publisher_;
 		yearPublish_ = book.yearPublish_;
 		price_ = book.price_;
 		isbn_ = book.isbn_;
 		copies_ = book.copies_;
 }
-*/
+
 
 string Book::getISBN() const
 {

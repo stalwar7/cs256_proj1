@@ -1,5 +1,8 @@
 #ifndef WAREHOUSE_H
 #define WAREHOUSE_H
+#include <string>
+#include "book.h"
+using namespace std;
 
 class Warehouse{
 	friend istream& operator >> (istream&, Warehouse&);
@@ -11,14 +14,14 @@ class Warehouse{
 		Warehouse ();
 		~Warehouse ();
 		
-		bool find (string isbn, Book& book) const;
+		bool find(string isbn, Book& book) const;
 
-		int find (short year, Book books[]) const;
+		int find(short year, Book books[]) const;
 
 		void sort(Book books[]);
 
 	private: 
-		void sort_ ();
+		void sort_();
 	
 	private:
 		Book books_[Warehouse::MAX_BOOKS];

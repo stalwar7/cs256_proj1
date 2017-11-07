@@ -1,6 +1,7 @@
 #ifndef BOOK_H
 #define BOOK_H
 #include <string>
+
 using namespace std;
 
 class Book {
@@ -18,6 +19,7 @@ class Book {
 		bool operator == (const Book&) const;
 		Book operator = (const Book&);
 		bool operator > (const Book&) const;
+		bool operator < (const Book&) const;
 		string getTitle();
 		string getAuthors();
 		string getPublisher();

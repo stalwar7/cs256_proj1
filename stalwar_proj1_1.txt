@@ -1,0 +1,456 @@
+Script started on Tue 07 Nov 2017 08:04:00 AM PST
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat book.day[Kt
+Programming Ruby
+2
+David Thomas
+Andrew Hunt
+Addison-Wesley
+2001
+0
+42.95
+0-201-71089-7
+123
+Problem Solving C++ - The Object of Programming
+2
+Walter Savitch
+Andrew Hunt
+Addison Wesley Longman, Inc.
+2001
+0
+74.00
+0-201-70390-4
+325
+C++ Network Programming - Volume 1
+2
+Douglas C. Schmidt
+Stephen D. Huston
+Addison-Wesley
+2002
+1
+35.90
+0-201-60464-7
+236
+Peopleware - Productive Projects and Teams
+2
+Tom DeMarco
+Timothy Lister
+Dorset House Publishing Co.
+1999
+1
+33.95
+0-932-63343-9
+38
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat search.dat
+0-932-63343-7
+1-234-56789-0
+0-201-60464-7
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat book.h
+#ifndef BOOK_H
+#define BOOK_H
+#include <string>
+
+using namespace std;
+
+class Book {
+	friend istream& operator >> (istream&, Book&);
+	friend ostream& operator << (ostream&, const Book&);
+
+	public:
+		static const int MAX_AUTHORS = 20;
+
+		Book();
+		~Book();
+
+		string getISBN() const;
+		short getYear() const;
+		bool operator == (const Book&) const;
+		Book operator = (const Book&);
+		bool operator > (const Book&) const;
+		bool operator < (const Book&) const;
+		string getTitle();
+		string getAuthors();
+		string getPublisher();
+		short getAuthorCount();
+		bool hardCover();
+		float getPrice();
+		long getCopies();
+
+	private:
+		string title_;
+		string authors_[Book::MAX_AUTHORS];
+		short authorCount_;
+		string publisher_;
+		short yearPublish_;
+		bool hardCover_;
+		float price_;
+		string isbn_;
+		long copies_;
+};
+
+#endif
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat book.cpp
+//#include "stdafx.h"
+#include <iomanip>
+#include "book.h"
+#include <iostream>
+using namespace std;
+
+
+Book::Book()
+{
+	
+}
+Book::~Book()
+{
+	//Deconstructor
+
+}
+istream& operator >> (istream& input, Book& book)
+{
+	getline(input, book.title_);
+        input >> book.authorCount_;	
+	input.ignore();
+	for (int i =0 ; i < book.authorCount_ ;i++)
+	{	 
+         	getline(input, book.authors_[i]);		
+	}
+	getline(input, book.publisher_);
+	input >> book.yearPublish_;
+	input >> book.hardCover_;
+	input >> book.price_;
+	input >> book.isbn_;
+	input >> book.copies_;
+	input.ignore();
+	return input;
+}
+ostream& operator << (ostream& output, const Book& book)
+{
+	output << "Title: " << book.title_;
+	output << "\nAuthor: ";
+	for (int i = 0; i < book.authorCount_;i++)
+	{
+		output <<"\n\t"<< book.authors_[i];
+	}	
+	output << "\nPublisher: " << book.publisher_;
+	output << "\nYear: " << book.yearPublish_;
+	if(book.hardCover_ == 0)
+		output << "\nCover: Hardcover ";
+	else
+		output << "\nCover: Paperback";
+	output << "\nPrice: " << book.price_;
+	output << "\nISBN: " << book.isbn_;
+	output << "\nCopies: " << book.copies_ << endl;
+	return output;
+}
+bool Book::operator==( const Book& book) const 
+{
+	return ( isbn_ == book.getISBN());
+}
+bool Book::operator > (const Book&b) const
+{
+	return ((isbn_.compare(b.isbn_ ))> 0);
+}
+bool Book::operator < (const Book& book) const
+{
+	return ((isbn_.compare(book.isbn_)) < 0);
+}
+Book Book::operator= (const Book& book) 
+{
+		title_ = book.title_;
+		authorCount_ = book.authorCount_;
+		for(int i=0; i<authorCount_; i++)
+			authors_[i] = book.authors_[i]; 
+		publisher_  = book.publisher_;
+		yearPublish_ = book.yearPublish_;
+		price_ = book.price_;
+		isbn_ = book.isbn_;
+		copies_ = book.copies_;
+		return book;
+}
+
+
+string Book::getISBN() const
+{
+	return isbn_;
+}
+
+short Book::getYear() const
+{
+	return yearPublish_;
+}
+string Book::getTitle()
+{
+	return title_;
+}
+string Book::getAuthors()
+{
+	return authors_[Book::MAX_AUTHORS];
+}
+short Book::getAuthorCount()
+{
+	return authorCount_;
+}
+string Book::getPublisher()
+{
+	return publisher_;
+}
+bool Book::hardCover()
+{
+	return hardCover_;
+}
+float Book::getPrice()
+{
+	return price_;
+}
+long Book::getCopies()
+{
+	return copies_;
+}
+
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat warehouse.h
+#ifndef WAREHOUSE_H
+#define WAREHOUSE_H
+#include <string>
+#include "book.h"
+using namespace std;
+
+class Warehouse{
+	friend istream& operator >> (istream&, Warehouse&);
+	friend ostream& operator << (ostream&, const Warehouse&);
+
+	public:
+		static const long MAX_BOOKS = 512;
+
+		Warehouse ();
+		~Warehouse ();
+		
+		bool find(string isbn, Book& book) const;
+
+		int find(short year, Book books[]) const;
+		
+		void sortBooks();
+		Book getBooks(int index) const;
+		int getBookCount() const;
+
+	private: 
+		void sort_();
+	
+	private:
+		Book books_[Warehouse::MAX_BOOKS];
+		long bookCount_;
+};
+#endif
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat warehouse.cpp
+#include <iomanip>
+#include "warehouse.h"
+#include <iostream>
+#include <cstring>
+#include <fstream>
+using namespace std;
+//Book books_[Warehouse::MAX_BOOKS];
+//long bookCount_;
+Warehouse::Warehouse()
+{
+	bookCount_ = 0;	
+}
+Warehouse::~Warehouse()
+{
+	//Deconstructor
+	//delete[]books_;
+}
+
+//glorified constructor
+istream& operator >> (istream& input, Warehouse& warehouse)
+{
+
+	for ( int i = 0; i < 4; i++)
+	{
+		input >> warehouse.books_[warehouse.bookCount_];
+		warehouse.bookCount_++;
+	}
+
+}
+
+ostream& operator << (ostream& output, const Warehouse& warehouse)
+{
+
+	for(int i = 0; i<warehouse.getBookCount(); i++)
+		output <<  warehouse.getBooks(i)<<endl << endl;		
+	
+}
+
+bool Warehouse::find(string isbn, Book& book) const
+{
+	for (int i = 0; i < bookCount_ -1; i++)
+	{	
+		
+	
+		if (isbn.compare(books_[i].getISBN())==0)
+		{
+			book = books_[i];
+			return true;
+		}	
+		else
+			return false;
+	}	
+
+}
+
+int Warehouse::find(short year, Book books[]) const
+{
+	int count;
+	for (int i = 0; i < bookCount_; i++)
+	{
+		if (books_[i].getYear() == year)
+			count++;
+	}
+	return count;	
+}
+void Warehouse::sort_()
+{
+	Book temp;
+	for (int i = 0; i <bookCount_ ; i++)
+	{
+		for(int j =1; j< bookCount_ -1; j++)
+		{
+			if (books_[j] < books_[i])
+			{
+				temp = books_[i];
+				books_[i] = books_[j];
+				books_[j] = temp;
+			}
+		}
+	}
+}
+void Warehouse::sortBooks() 
+{
+	sort_();
+}
+int Warehouse::getBookCount() const
+	{return bookCount_;}
+Book Warehouse::getBooks(int index) const
+	{return books_[index];}
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m cat proj01.cpp
+#include "book.h"
+#include "warehouse.h"
+#include <iostream>
+#include <fstream>
+int main()
+{
+
+	
+	Warehouse house;
+	Book bookList[4];
+	ifstream inputFile;
+	inputFile.open("book.dat");
+	cout << "---------------------- Sorted Inventory List by ISBN ---------------------" << endl;
+	inputFile >> house;
+	house.sortBooks();
+	cout << house;
+	inputFile.close();
+
+	cout << "----------------- Inventory Search ----------------" << endl;
+	ifstream input;
+	input.open("search.dat");
+	Book book;
+	string array[3];
+	while(!input.eof())
+	{
+		for (int i = 0; i < 3; i++)
+			input >> array[i];
+	}
+
+
+	for(int i = 0; i < 3; i++)
+	{
+		
+		Book book;
+		bool res = house.find(array[i], book);
+		if(res)
+		{
+			cout << "ISBN: " << array[i] << "-- FOUND:" << endl;
+			cout << book;
+			//cout << "Title: "<< book.getTitle() << endl;
+			//cout <<"Author: " << book.getAuthors() << endl;
+			//cout << "Publisher: " <<book.getPublisher() << endl;
+			//cout << "Year: " << book.getYear() << endl;
+			//cout << "Cover: " << book.hardCover() << endl;
+			//cout << "Prie: " << book.getPrice() << endl;
+			//cout << "ISBN: " <<  array[i] <<endl;
+			//cout << "Copies: " << book.getCopies() << endl;
+		}
+		else 
+			cout << "ISBN: " << array[i] << " --NOT FOUND" << endl;
+
+	}
+	input.close();
+	return 0;
+}
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m ./proj01.c[K[K
+---------------------- Sorted Inventory List by ISBN ---------------------
+Title: C++ Network Programming - Volume 1
+Author: 
+	Douglas C. Schmidt
+	Stephen D. Huston
+Publisher: Addison-Wesley
+Year: 2002
+Cover: Hardcover 
+Price: 35.9
+ISBN: 0-201-60464-7
+Copies: 236
+
+
+Title: Peopleware - Productive Projects and Teams
+Author: 
+	Tom DeMarco
+	Timothy Lister
+Publisher: Dorset House Publishing Co.
+Year: 1999
+Cover: Hardcover 
+Price: 33.95
+ISBN: 0-932-63343-9
+Copies: 38
+
+
+Title: Programming Ruby
+Author: 
+	David Thomas
+	Andrew Hunt
+Publisher: Addison-Wesley
+Year: 2001
+Cover: Paperback
+Price: 42.95
+ISBN: 0-201-71089-7
+Copies: 123
+
+
+Title: Problem Solving C++ - The Object of Programming
+Author: 
+	Walter Savitch
+	Andrew Hunt
+Publisher: Addison Wesley Longman, Inc.
+Year: 2001
+Cover: Paperback
+Price: 74
+ISBN: 0-201-70390-4
+Copies: 325
+
+
+----------------- Inventory Search ----------------
+ISBN: 0-932-63343-7 --NOT FOUND
+ISBN: 1-234-56789-0 --NOT FOUND
+ISBN: 0-201-60464-7-- FOUND:
+Title: C++ Network Programming - Volume 1
+Author: 
+	Douglas C. Schmidt
+	Stephen D. Huston
+Publisher: Addison-Wesley
+Year: 2002
+Cover: Hardcover 
+Price: 35.9
+ISBN: 0-201-60464-7
+Copies: 236
+]0;stalwar@abbott:~/CS256/Project1[01;32mstalwar@abbott[01;34m ~/CS256/Project1 $[00m exit
+exit
+
+Script done on Tue 07 Nov 2017 08:04:33 AM PST

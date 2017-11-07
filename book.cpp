@@ -42,39 +42,39 @@ ostream& operator << (ostream& output, const Book& book)
 	}	
 	output << "\nPublisher: " << book.publisher_;
 	output << "\nYear: " << book.yearPublish_;
-	output << "\nCover: " << book.hardCover_;
+	if(book.hardCover_ == 0)
+		output << "\nCover: Hardcover ";
+	else
+		output << "\nCover: Paperback";
 	output << "\nPrice: " << book.price_;
 	output << "\nISBN: " << book.isbn_;
 	output << "\nCopies: " << book.copies_ << endl;
 	return output;
 }
-bool operator==(Book& book, Book& book2) 
+bool Book::operator==( const Book& book) const 
 {
-	return (book2.getTitle() == book.getTitle()) &&
-		(book2.getAuthors() == book.getAuthors()) &&
-		(book2.getPublisher()== book.getPublisher()) &&
-		(book2.getYear() == book.getYear()) &&
-		(book2.getPrice() == book.getPrice()) &&
-		(book2.getISBN() == book.getISBN());
+	return ( isbn_ == book.getISBN());
 }
-bool operator> ( Book& book, Book& book2)
+bool Book::operator > (const Book&b) const
 {
-	return (book2.getTitle() == book.getTitle()) &&
-		(book2.getAuthors() == book.getAuthors()) &&
-		(book2.getPublisher() == book.getPublisher()) &&
-		(book2.getYear()== book.getYear()) &&
-		(book2.getPrice() == book.getPrice()) &&
-		(book2.getISBN() == book.getISBN());
+	return ((isbn_.compare(b.isbn_ ))> 0);
+}
+bool Book::operator < (const Book& book) const
+{
+	return ((isbn_.compare(book.isbn_)) < 0);
 }
 Book Book::operator= (const Book& book) 
 {
 		title_ = book.title_;
-		authors_[Book::MAX_AUTHORS] = book.authors_[Book::MAX_AUTHORS]; 
+		authorCount_ = book.authorCount_;
+		for(int i=0; i<authorCount_; i++)
+			authors_[i] = book.authors_[i]; 
 		publisher_  = book.publisher_;
 		yearPublish_ = book.yearPublish_;
 		price_ = book.price_;
 		isbn_ = book.isbn_;
 		copies_ = book.copies_;
+		return book;
 }
 
 
